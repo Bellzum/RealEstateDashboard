@@ -1,6 +1,6 @@
 # PropAI — Real Estate Price, Rent & Revenue Intelligence Dashboard
 
-> Version: MVP Concept v1.0 | Date: 2026-04-24 | Author: Product Architecture Team
+> | Date: 2026-04-24 | Author: ベル
 
 ---
 
