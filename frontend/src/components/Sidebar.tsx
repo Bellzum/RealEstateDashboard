@@ -37,7 +37,7 @@ export default function Sidebar({ currentPage, onNavigate, role, onRoleChange }:
           <div className="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center text-white font-bold text-sm">
             P
           </div>
-          <span className="text-white font-bold text-lg tracking-tight">PropIQ</span>
+          <span className="text-white font-bold text-lg tracking-tight">PropAI</span>
         </div>
         <p className="text-slate-400 text-xs">AI Real Estate Revenue Dashboard</p>
       </div>

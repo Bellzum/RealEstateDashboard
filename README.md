@@ -1,12 +1,12 @@
-# PropIQ — Real Estate Price, Rent & Revenue Intelligence Dashboard
+# PropAI — Real Estate Price, Rent & Revenue Intelligence Dashboard
 
 > Version: MVP Concept v1.0 | Date: 2026-04-24 | Author: Product Architecture Team
 
 ---
 
-## What is PropIQ?
+## What is PropAI?
 
-PropIQ is an AI-powered real estate intelligence platform built for business leaders, investors, and property owners who need to move beyond gut-feel decisions and into data-driven revenue strategy.
+PropAI is an AI-powered real estate intelligence platform built for business leaders, investors, and property owners who need to move beyond gut-feel decisions and into data-driven revenue strategy.
 
 It answers the three questions every real estate decision-maker actually cares about:
 
@@ -14,7 +14,7 @@ It answers the three questions every real estate decision-maker actually cares a
 2. **How much revenue can I generate from it?**
 3. **What should I do next — buy, hold, renovate, lease, or sell?**
 
-PropIQ does this by combining property master data, location intelligence, market benchmarks, renovation scenarios, event impact data, and AI-extracted insights from unstructured documents (PDFs, Excel rent rolls, images, voice notes) into a unified dashboard designed for each user role.
+PropAI does this by combining property master data, location intelligence, market benchmarks, renovation scenarios, event impact data, and AI-extracted insights from unstructured documents (PDFs, Excel rent rolls, images, voice notes) into a unified dashboard designed for each user role.
 
 ---
 
@@ -76,8 +76,8 @@ Deploy:      Docker Compose (dev) → AWS ECS (prod)
 
 ```bash
 # 1. Clone and enter project
-git clone https://github.com/your-org/propiq
-cd propiq
+git clone https://github.com/your-org/propai
+cd propai
 
 # 2. Start services
 docker compose up -d

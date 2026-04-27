@@ -184,5 +184,5 @@ export function downloadTemplate(): void {
   guideSheet['!cols'] = [{ wch: 32 }, { wch: 16 }, { wch: 10 }, { wch: 55 }, { wch: 20 }]
   XLSX.utils.book_append_sheet(wb, guideSheet, 'Column Guide')
 
-  XLSX.writeFile(wb, 'PropIQ_Property_Template.xlsx')
+  XLSX.writeFile(wb, 'PropAI_Property_Template.xlsx')
 }

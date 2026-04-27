@@ -41,7 +41,7 @@
 - Anomalies flagged: unexplained zero rents, future start dates, overlapping tenancies
 - Comparison to prior period rent roll (if uploaded)
 
-**Use case:** Property manager uploads a quarterly rent roll → PropIQ auto-generates the revenue dashboard without manual data entry.
+**Use case:** Property manager uploads a quarterly rent roll → PropAI auto-generates the revenue dashboard without manual data entry.
 
 ---
 

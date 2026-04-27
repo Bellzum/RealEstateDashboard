@@ -1,4 +1,4 @@
-# PropIQ — 3-Minute Hackathon Demo Script
+# PropAI — 3-Minute Hackathon Demo Script
 
 **App name:** AI Real Estate Revenue Dashboard
 **Audience:** Judges, investors, real estate executives
@@ -10,7 +10,7 @@
 
 > "Right now, most real estate managers in Japan are using Excel to decide which properties to buy, renovate, or sell.
 > They miss revenue. They take on risk they can't see.
-> PropIQ changes that. In under 30 seconds, it tells you: what is this property worth, what revenue can I expect, and what should I do next."
+> PropAI changes that. In under 30 seconds, it tells you: what is this property worth, what revenue can I expect, and what should I do next."
 
 ---
 
@@ -72,7 +72,7 @@
 
 ## [2:55 – 3:00] CLOSE
 
-> "PropIQ: rule-based revenue intelligence, document AI, and role-based views — all in one dashboard.
+> "PropAI: rule-based revenue intelligence, document AI, and role-based views — all in one dashboard.
 > Built for the real estate managers who make million-dollar decisions every week.
 > Thank you."
 

@@ -1,6 +1,6 @@
 # D1 — Product Concept Summary
 
-## Product Name: PropIQ
+## Product Name: PropAI
 
 **Tagline:** *Know the value. Predict the revenue. Make the move.*
 
@@ -22,7 +22,7 @@ The result: **mispriced assets, missed revenue, and slow decisions.**
 
 ## Product Vision
 
-PropIQ is a **real estate revenue intelligence platform** — not just a price calculator.
+PropAI is a **real estate revenue intelligence platform** — not just a price calculator.
 
 It treats every property as a **revenue-generating asset** and helps each user type — from C-level executives to field sales staff — understand the levers that control that revenue and the decisions that maximize it.
 
@@ -38,7 +38,7 @@ Layer 3: PRESCRIPTIVE — "What should we do? Buy? Hold? Renovate? Sell?"
 
 ## Core Business Logic
 
-Every property in PropIQ is evaluated against a **Revenue Value Model**:
+Every property in PropAI is evaluated against a **Revenue Value Model**:
 
 ```
 Gross Revenue = (Rent per m² × Occupiable m²) × Occupancy Rate × 12 months
@@ -48,7 +48,7 @@ ROI = (NOI − Debt Service) ÷ Equity Invested
 Payback Period = Total Investment ÷ Annual NOI
 ```
 
-PropIQ adds three prediction layers on top:
+PropAI adds three prediction layers on top:
 
 1. **Price Prediction** — what comparable properties are selling for, adjusted for property attributes and location
 2. **Rent Prediction** — market rent benchmarked against competing buildings within 500m–2km radius
@@ -58,7 +58,7 @@ PropIQ adds three prediction layers on top:
 
 ## Key Differentiators vs. Competitors
 
-| Feature | PropIQ | Typical BI Tool | Broker Software |
+| Feature | PropAI | Typical BI Tool | Broker Software |
 |---------|--------|-----------------|-----------------|
 | Revenue simulation (not just price) | ✅ | ❌ | ❌ |
 | AI document extraction (PDF, Excel, image) | ✅ | ❌ | ❌ |
@@ -77,7 +77,7 @@ PropIQ adds three prediction layers on top:
 2. **Decision-ready outputs.** Show recommended actions, not just data.
 3. **Role-aware.** A C-level executive and a field analyst see the same data differently.
 4. **Uncertainty-honest.** Always show confidence intervals and risk scores.
-5. **Document-native.** Real estate runs on PDFs and Excel. PropIQ must handle them.
+5. **Document-native.** Real estate runs on PDFs and Excel. PropAI must handle them.
 6. **Japan-context-aware.** Incorporate Japan-specific factors: railway distance, floor ratio, zoning, earthquake risk, and population aging.
 
 ---

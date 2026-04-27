@@ -7,7 +7,7 @@
 ## MVP Philosophy
 
 Build the minimum surface that proves the core value proposition:
-> "PropIQ tells you which property is underperforming, by how much, and what to do about it — in under 30 seconds."
+> "PropAI tells you which property is underperforming, by how much, and what to do about it — in under 30 seconds."
 
 Everything not serving that sentence is deferred to v2.
 

@@ -342,7 +342,7 @@
 ## Navigation Structure
 
 ```
-PropIQ
+PropAI
 ├── / (redirect to /dashboard/executive)
 ├── /dashboard
 │   ├── /executive          ← C-level overview
