@@ -2,6 +2,9 @@
 
 > | Date: 2026-04-24 | Author: ベル
 
+![PropAI Dashboard](ex1.png)
+![PropAI Dashboard](ex2.png)
+
 ---
 
 ## What is PropAI?
