@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react'
-import type { Page, Role } from './types'
+import type { Page, Role, RawProperty } from './types'
 import { rawProperties } from './data/mockData'
 import { computeProperties } from './utils/calculations'
 import Sidebar from './components/Sidebar'
@@ -8,29 +8,49 @@ import PropertyComparison from './pages/PropertyComparison'
 import PropertyDetail from './pages/PropertyDetail'
 import AIDocumentSummary from './pages/AIDocumentSummary'
 
+export interface UploadState {
+  fileName: string
+  rowCount: number
+  uploadedAt: string
+}
+
 export default function App() {
   const [page, setPage] = useState<Page>('executive')
   const [role, setRole] = useState<Role>('C-Level')
   const [selectedPropertyId, setSelectedPropertyId] = useState<string>('P001')
+  const [customProperties, setCustomProperties] = useState<RawProperty[] | null>(null)
+  const [uploadState, setUploadState] = useState<UploadState | null>(null)
 
-  const properties = useMemo(() => computeProperties(rawProperties), [])
+  const properties = useMemo(
+    () => computeProperties(customProperties ?? rawProperties),
+    [customProperties],
+  )
 
-  const selectedProperty = properties.find((p) => p.property_id === selectedPropertyId) ?? properties[0]
+  const handleDataLoad = (data: RawProperty[], fileName: string, rowCount: number) => {
+    setCustomProperties(data)
+    setUploadState({ fileName, rowCount, uploadedAt: new Date().toLocaleTimeString() })
+    if (data.length > 0) setSelectedPropertyId(data[0].property_id)
+  }
+
+  const handleDataReset = () => {
+    setCustomProperties(null)
+    setUploadState(null)
+    setSelectedPropertyId('P001')
+  }
+
+  const selectedProperty =
+    properties.find((p) => p.property_id === selectedPropertyId) ?? properties[0]
 
   const handleSelectProperty = (id: string) => {
     setSelectedPropertyId(id)
     setPage('detail')
   }
 
-  const handleNavigate = (p: Page) => {
-    setPage(p)
-  }
-
   return (
     <div className="flex min-h-screen bg-gray-50">
       <Sidebar
         currentPage={page}
-        onNavigate={handleNavigate}
+        onNavigate={setPage}
         role={role}
         onRoleChange={setRole}
       />
@@ -39,7 +59,10 @@ export default function App() {
           <ExecutiveDashboard
             properties={properties}
             role={role}
+            uploadState={uploadState}
             onSelectProperty={handleSelectProperty}
+            onDataLoad={handleDataLoad}
+            onDataReset={handleDataReset}
           />
         )}
         {page === 'comparison' && (
@@ -57,9 +80,7 @@ export default function App() {
           />
         )}
         {page === 'documents' && (
-          <AIDocumentSummary
-            onSelectProperty={handleSelectProperty}
-          />
+          <AIDocumentSummary onSelectProperty={handleSelectProperty} />
         )}
       </main>
     </div>

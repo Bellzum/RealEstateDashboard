@@ -1,0 +1,9 @@
+property_id,property_name,area,property_type,floor_area_m2,building_age,walking_minutes_to_station,current_rent_per_m2,competitor_rent_per_m2,occupancy_rate,renovation_cost,expected_rent_increase_percent,foot_traffic_score,office_nearby_score,event_score,risk_score
+P001,Shibuya Mark Office,Shibuya,Office,3200,8,4,3800,4200,0.965,5000000,0.125,9.2,9.5,6.5,2.1
+P002,Shinjuku Tower Apt,Shinjuku,Apartment,5800,12,6,3100,3400,0.885,10000000,0.125,8.9,8.5,7.0,3.4
+P003,Nakameguro Riverside Retail,Meguro,Retail,1800,5,3,2800,3100,1.000,5000000,0.180,8.8,5.0,8.5,1.8
+P004,Kawasaki Logistics Hub,Kawasaki,Warehouse,12000,15,12,1100,1250,0.950,30000000,0.100,5.2,4.0,2.0,3.0
+P005,Roppongi Hills Mixed-Use,Roppongi,Mixed-use,8500,18,5,2800,3800,0.780,60000000,0.285,8.5,8.0,9.5,5.2
+P006,Ebisu South Event Venue,Ebisu,Venue,1400,3,5,4200,4500,0.910,3000000,0.100,8.3,6.0,8.0,2.8
+P007,Omiya Office Center,Saitama,Office,4500,22,7,900,1200,0.720,8000000,0.150,7.2,7.5,4.0,6.8
+P008,Kawasaki Station Retail,Kawasaki,Retail,950,7,2,2800,3200,1.000,3000000,0.100,9.0,7.0,5.0,2.5

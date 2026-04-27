@@ -1,16 +1,22 @@
+import { useRef, useState } from 'react'
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip,
-  ScatterChart, Scatter, ResponsiveContainer, Cell, Legend,
+  ScatterChart, Scatter, ResponsiveContainer, Cell,
   ReferenceLine,
 } from 'recharts'
-import type { Property, Role } from '../types'
+import type { Property, Role, RawProperty } from '../types'
+import type { UploadState } from '../App'
 import KPICard from '../components/KPICard'
 import { fmtJPY, fmtPct, fmtScore, recColorClass } from '../utils/calculations'
+import { parsePropertyFile, downloadTemplate } from '../utils/fileParser'
 
 interface Props {
   properties: Property[]
   role: Role
+  uploadState: UploadState | null
   onSelectProperty: (id: string) => void
+  onDataLoad: (data: RawProperty[], fileName: string, rowCount: number) => void
+  onDataReset: () => void
 }
 
 const REC_COLORS: Record<Property['rec_color'], string> = {
@@ -22,7 +28,13 @@ const AREA_COLORS: Record<string, string> = {
   Roppongi: '#f97316', Ebisu: '#8b5cf6', Saitama: '#ef4444',
 }
 
-function RoleSummaryCard({ properties, role, onSelectProperty }: Props) {
+interface RoleSummaryProps {
+  properties: Property[]
+  role: Role
+  onSelectProperty: (id: string) => void
+}
+
+function RoleSummaryCard({ properties, role, onSelectProperty }: RoleSummaryProps) {
   const sorted = [...properties].sort((a, b) => b.opportunity_score - a.opportunity_score)
   const best = sorted[0]
   const worst = sorted[sorted.length - 1]
@@ -186,14 +198,37 @@ const CustomTooltipScatter = ({ active, payload }: { active?: boolean; payload?:
   return null
 }
 
-export default function ExecutiveDashboard({ properties, role, onSelectProperty }: Props) {
+export default function ExecutiveDashboard({
+  properties, role, uploadState, onSelectProperty, onDataLoad, onDataReset,
+}: Props) {
+  const fileInputRef = useRef<HTMLInputElement>(null)
+  const [uploadStatus, setUploadStatus] = useState<'idle' | 'loading' | 'error'>('idle')
+  const [uploadErrors, setUploadErrors] = useState<string[]>([])
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+    setUploadStatus('loading')
+    setUploadErrors([])
+    const result = await parsePropertyFile(file)
+    if (result.errors.length > 0 && result.data.length === 0) {
+      setUploadStatus('error')
+      setUploadErrors(result.errors)
+    } else {
+      setUploadStatus('idle')
+      setUploadErrors(result.errors)   // non-fatal warnings
+      onDataLoad(result.data, result.fileName, result.rowCount)
+    }
+    // Reset input so same file can be re-uploaded
+    e.target.value = ''
+  }
+
   const sorted = [...properties].sort((a, b) => b.opportunity_score - a.opportunity_score)
   const best = sorted[0]
   const highestRevenue = [...properties].sort((a, b) => b.yearly_revenue - a.yearly_revenue)[0]
   const bestROI = [...properties].sort((a, b) => b.renovation_roi - a.renovation_roi)[0]
   const highestRisk = [...properties].sort((a, b) => b.risk_score - a.risk_score)[0]
   const totalRevenue = properties.reduce((s, p) => s + p.yearly_revenue, 0)
-  const avgOccupancy = properties.reduce((s, p) => s + p.occupancy_rate, 0) / properties.length
 
   const barData = [...properties]
     .sort((a, b) => b.yearly_revenue - a.yearly_revenue)
@@ -212,17 +247,117 @@ export default function ExecutiveDashboard({ properties, role, onSelectProperty 
   return (
     <div className="p-8 bg-gray-50 min-h-screen">
       {/* Header */}
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900">Executive Dashboard</h1>
-        <p className="text-gray-500 mt-1">8-property portfolio overview · Rule-based predictions · Mock data</p>
+      <div className="flex items-start justify-between mb-6">
+        <div>
+          <h1 className="text-3xl font-bold text-gray-900">Executive Dashboard</h1>
+          <p className="text-gray-500 mt-1">
+            {properties.length}-property portfolio overview · Rule-based predictions
+            {uploadState ? ` · ${uploadState.fileName}` : ' · Mock data'}
+          </p>
+        </div>
       </div>
+
+      {/* ── Data Upload Banner ─────────────────────────────────────────── */}
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept=".csv,.xlsx,.xls"
+        className="hidden"
+        onChange={handleFileChange}
+      />
+
+      {!uploadState ? (
+        /* Default state — invite user to upload */
+        <div className="bg-white border-2 border-dashed border-blue-200 rounded-xl p-5 mb-8 flex items-center justify-between gap-4 hover:border-blue-400 transition-colors">
+          <div className="flex items-center gap-4">
+            <div className="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center text-2xl flex-shrink-0">
+              📂
+            </div>
+            <div>
+              <p className="font-semibold text-gray-800">Upload your own property data</p>
+              <p className="text-sm text-gray-500 mt-0.5">
+                Currently showing <span className="font-medium text-blue-600">mock data (8 properties)</span>.
+                Upload a <span className="font-medium">.xlsx</span> or <span className="font-medium">.csv</span> file to analyse your real portfolio.
+              </p>
+            </div>
+          </div>
+          <div className="flex items-center gap-3 flex-shrink-0">
+            <button
+              onClick={downloadTemplate}
+              className="flex items-center gap-2 px-4 py-2.5 rounded-lg border border-gray-200 bg-white text-sm font-medium text-gray-700 hover:border-blue-400 hover:text-blue-700 transition-all shadow-sm"
+            >
+              ⬇ Download Template
+            </button>
+            <button
+              onClick={() => fileInputRef.current?.click()}
+              disabled={uploadStatus === 'loading'}
+              className="flex items-center gap-2 px-5 py-2.5 rounded-lg bg-blue-600 text-white text-sm font-semibold hover:bg-blue-700 transition-all shadow-sm disabled:opacity-60"
+            >
+              {uploadStatus === 'loading' ? (
+                <><span className="animate-spin inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full" /> Parsing…</>
+              ) : (
+                <>⬆ Upload File</>
+              )}
+            </button>
+          </div>
+        </div>
+      ) : (
+        /* Loaded state — show success banner */
+        <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-4 mb-8 flex items-center justify-between gap-4">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 bg-emerald-100 rounded-lg flex items-center justify-center text-emerald-600 text-xl">
+              ✓
+            </div>
+            <div>
+              <p className="font-semibold text-emerald-800">
+                {uploadState.rowCount} properties loaded from <span className="font-bold">{uploadState.fileName}</span>
+              </p>
+              <p className="text-sm text-emerald-600 mt-0.5">
+                Uploaded at {uploadState.uploadedAt} · All predictions recalculated
+              </p>
+            </div>
+          </div>
+          <div className="flex items-center gap-2 flex-shrink-0">
+            <button
+              onClick={() => fileInputRef.current?.click()}
+              disabled={uploadStatus === 'loading'}
+              className="px-4 py-2 rounded-lg border border-emerald-300 bg-white text-sm font-medium text-emerald-700 hover:bg-emerald-50 transition-all"
+            >
+              ⬆ Upload Different File
+            </button>
+            <button
+              onClick={onDataReset}
+              className="px-4 py-2 rounded-lg border border-gray-200 bg-white text-sm font-medium text-gray-600 hover:text-red-600 hover:border-red-200 transition-all"
+            >
+              ✕ Reset to Mock Data
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Error / warning messages */}
+      {uploadErrors.length > 0 && (
+        <div className={`rounded-xl p-4 mb-6 border ${uploadStatus === 'error' ? 'bg-red-50 border-red-200' : 'bg-amber-50 border-amber-200'}`}>
+          <p className={`font-semibold text-sm mb-2 ${uploadStatus === 'error' ? 'text-red-700' : 'text-amber-700'}`}>
+            {uploadStatus === 'error' ? '✕ Upload failed — fix these issues and try again:' : '⚠ Some rows were skipped:'}
+          </p>
+          <ul className="space-y-1">
+            {uploadErrors.slice(0, 6).map((err, i) => (
+              <li key={i} className={`text-xs ${uploadStatus === 'error' ? 'text-red-600' : 'text-amber-600'}`}>• {err}</li>
+            ))}
+            {uploadErrors.length > 6 && (
+              <li className="text-xs text-gray-400">… and {uploadErrors.length - 6} more</li>
+            )}
+          </ul>
+        </div>
+      )}
 
       {/* KPI Cards */}
       <div className="grid grid-cols-5 gap-4 mb-8">
         <KPICard
           label="Total Portfolio Revenue"
           value={fmtJPY(totalRevenue)}
-          sub="Annual projected (all 8 properties)"
+          sub={`Annual projected (all ${properties.length} properties)`}
           icon="💰"
           color="violet"
         />
